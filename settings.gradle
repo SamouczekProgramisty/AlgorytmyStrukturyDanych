@@ -1,0 +1,3 @@
+rootProject.name = 'AlgorytmyStrukturyDanych'
+
+include '01_linked_list'
