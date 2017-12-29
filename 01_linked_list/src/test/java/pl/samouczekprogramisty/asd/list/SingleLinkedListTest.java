@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class SingleLinkedListTest {
 
@@ -145,4 +146,62 @@ public class SingleLinkedListTest {
         assertThat(list.size(), is(2));
         assertThat(list.get(1), is("bc"));
     }
+
+    @Test
+    public void shouldBeAbleToAddAtIndex() {
+        SingleLinkedList<String> list = new SingleLinkedList<>();
+
+        list.add(0, "a");
+
+        assertThat(list.size(), is(1));
+        assertThat(list.get(0), is("a"));
+    }
+
+    @Test
+    public void shouldKeepAddingAtIndex0() {
+        SingleLinkedList<String> list = new SingleLinkedList<>();
+
+        list.add(0, "a");
+        list.add(0, "b");
+        list.add(0, "c");
+
+        assertThat(list.size(), is(3));
+        assertThat(list.get(0), is("c"));
+        assertThat(list.get(1), is("b"));
+        assertThat(list.get(2), is("a"));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void shouldThrowAnExceptionWhenAddingOnNonExistingIndex() {
+        SingleLinkedList<String> list = new SingleLinkedList<>();
+        list.add(1, "a");
+    }
+
+    @Test
+    public void shouldThrowAnExceptionWhenAddingOnNonExistingIndexWithAlreadyFilledList() {
+        SingleLinkedList<String> list = new SingleLinkedList<>();
+        list.add(0, "a");
+
+        try {
+            list.add(2, "nope");
+            fail("IndexOutOfBountsException should have been thrown!");
+        } catch (IndexOutOfBoundsException e) {
+            // that's expected
+        }
+    }
+
+    @Test
+    public void shouldKeepAddingAtTheEnd() {
+        SingleLinkedList<String> list = new SingleLinkedList<>();
+
+        list.add(0, "a");
+        list.add(1, "b");
+        list.add(2, "c");
+
+        assertThat(list.size(), is(3));
+        assertThat(list.get(0), is("a"));
+        assertThat(list.get(1), is("b"));
+        assertThat(list.get(2), is("c"));
+    }
+
 }
