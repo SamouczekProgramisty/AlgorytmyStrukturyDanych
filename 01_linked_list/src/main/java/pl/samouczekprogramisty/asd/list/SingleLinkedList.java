@@ -23,15 +23,7 @@ public class SingleLinkedList<E> {
         }
     }
 
-    private Node<E> getLast() {
-        Node<E> currentNode = first;
-        while (currentNode.next != null) {
-            currentNode = currentNode.next;
-        }
-        return currentNode;
-    }
-
-    private NodePair getNodeWithPrevious(int index) {
+    private NodePair<E> getNodeWithPrevious(int index) {
         if (isEmpty() || index < 0) {
             throw new IndexOutOfBoundsException("Index " + index);
         }
@@ -48,7 +40,7 @@ public class SingleLinkedList<E> {
             currentIndex--;
         }
 
-        return new NodePair(previousNode, currentNode);
+        return new NodePair<>(previousNode, currentNode);
     }
 
     public int size() {
@@ -66,14 +58,7 @@ public class SingleLinkedList<E> {
     }
 
     public boolean add(E e) {
-        Node<E> newNode = new Node<>(e);
-        if (first == null) {
-            first = newNode;
-            return true;
-        }
-        Node<E> lastNode = getLast();
-        lastNode.next = newNode;
-        return true;
+        return add(size(), e);
     }
 
     public void clear() {
@@ -92,30 +77,31 @@ public class SingleLinkedList<E> {
         return oldElement;
     }
 
-    public void add(int index, E element) {
+    public boolean add(int index, E element) {
         if (first == null && index == 0) {
             first = new Node<>(element);
-            return;
+            return true;
         }
 
-        NodePair pair = getNodeWithPrevious(index);
-        Node<E> previouNode = pair.previous;
+        NodePair<E> pair = getNodeWithPrevious(index);
+        Node<E> previousNode = pair.previous;
         Node<E> nodeAtIndex = pair.current;
 
         // adding at the beginning of the list
-        if (previouNode == null) {
+        if (previousNode == null) {
             first = new Node<>(element);
             first.next = nodeAtIndex;
-            return;
+            return true;
         }
 
         Node<E> newNode = new Node<>(element);
         newNode.next = nodeAtIndex;
-        previouNode.next = newNode;
+        previousNode.next = newNode;
+        return true;
     }
 
     public E remove(int index) {
-        NodePair pair = getNodeWithPrevious(index);
+        NodePair<E> pair = getNodeWithPrevious(index);
         Node<E> previousNode = pair.previous;
         Node<E> nodeToRemove = pair.current;
         E removedElement = nodeToRemove.element;
