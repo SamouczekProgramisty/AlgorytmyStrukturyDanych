@@ -1,9 +1,12 @@
 package pl.samouczekprogramisty.asd.list;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -190,6 +193,15 @@ public class DoubleLinkedListTest {
         assertThat(list.get(0), is("a"));
         assertThat(list.get(1), is("b"));
         assertThat(list.get(2), is("c"));
+    }
+
+    @Test
+    public void shouldRemoveLastElementFromList() {
+        list.add("a");
+        list.remove(0);
+
+        assertThat(list.first, is(nullValue()));
+        assertThat(list.last, is(nullValue()));
     }
 
 }

@@ -2,7 +2,8 @@ package pl.samouczekprogramisty.asd.list;
 
 public class SingleLinkedList<E> {
 
-    private Node<E> first;
+    // accessible from unit testss
+    Node<E> first;
 
     private static class Node<E> {
         private E element;

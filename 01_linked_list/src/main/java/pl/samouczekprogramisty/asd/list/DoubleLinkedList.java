@@ -2,8 +2,9 @@ package pl.samouczekprogramisty.asd.list;
 
 public class DoubleLinkedList<E> {
 
-    private Node<E> first;
-    private Node<E> last;
+    // accessible from unit tests
+    Node<E> first;
+    Node<E> last;
 
     private static class Node<E> {
         private E element;
@@ -118,8 +119,14 @@ public class DoubleLinkedList<E> {
 
         // removing first node
         if (previousNode == null) {
-            first = nextNode;
-            nextNode.previous = null;
+            if (nextNode == null) {
+                first = null;
+                last = null;
+            }
+            else {
+                first = nextNode;
+                nextNode.previous = null;
+            }
             return removedElement;
         }
 
