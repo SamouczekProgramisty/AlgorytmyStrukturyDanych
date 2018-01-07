@@ -1,3 +1,5 @@
 rootProject.name = 'AlgorytmyStrukturyDanych'
 
 include '01_linked_list'
+include '02_hash_map'
+
