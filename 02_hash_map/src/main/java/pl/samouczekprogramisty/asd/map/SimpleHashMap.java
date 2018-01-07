@@ -2,7 +2,6 @@ package pl.samouczekprogramisty.asd.map;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 public class SimpleHashMap<K, V> {
 
@@ -22,37 +21,11 @@ public class SimpleHashMap<K, V> {
 
         private final K key;
 
-        private final V value;
+        private V value;
 
         Entry(K key, V value) {
             this.key = key;
             this.value = value;
-        }
-
-        K getKey() {
-            return key;
-        }
-
-        V getValue() {
-            return value;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Entry<?, ?> entry = (Entry<?, ?>) o;
-            return Objects.equals(getKey(), entry.getKey()) &&
-                    Objects.equals(getValue(), entry.getValue());
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(getKey(), getValue());
         }
     }
 
@@ -78,7 +51,7 @@ public class SimpleHashMap<K, V> {
         List<Entry<K, V>> bucket = table[hash];
         if (bucket != null) {
             for (Entry<K, V> entry : bucket) {
-                if ((key == entry.key) || (key != null && key.equals(entry.key))) {
+                if (key == entry.key || (key != null && key.equals(entry.key))) {
                     return entry.value;
                 }
             }
@@ -91,9 +64,53 @@ public class SimpleHashMap<K, V> {
         if (table[hash] == null) {
             table[hash] = new LinkedList<>();
         }
-        table[hash].add(new Entry<>(key, value));
-        size++;
-        return value;
+        V oldValue = null;
+        boolean keyExist = false;
+        List<Entry<K, V>> bucket = table[hash];
+
+        for (Entry<K, V> entry : bucket) {
+            if (key == entry.key || (key != null && key.equals(entry.key))) {
+                oldValue = entry.value;
+                entry.value = value;
+                keyExist = true;
+                break;
+            }
+        }
+
+        if (!keyExist) {
+            bucket.add(new Entry<>(key, value));
+            size++;
+        }
+
+        if (size == threshold) {
+            resize();
+        }
+
+        return oldValue;
+    }
+
+    private void resize() {
+        if (table.length == Integer.MAX_VALUE) {
+            return;
+        }
+
+        List<Entry<K, V>>[] oldTable = table;
+        table = new List[table.length * 2];
+        threshold = (int) (table.length * LOAD_FACTOR);
+
+        for (List<Entry<K, V>> bucket : oldTable) {
+            if (bucket == null) {
+                continue;
+            }
+            for (Entry<K, V> entry : bucket) {
+                int hash = hash(entry.key);
+                if(table[hash] == null) {
+                    table[hash] = new LinkedList<>();
+                }
+                List<Entry<K, V>> newBucket = table[hash];
+                newBucket.add(entry);
+            }
+        }
     }
 
     private int hash(K key) {
