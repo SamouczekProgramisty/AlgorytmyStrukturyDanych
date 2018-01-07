@@ -24,16 +24,16 @@ public class SimpleHashMap<K, V> {
 
         private final V value;
 
-        public Entry(K key, V value) {
+        Entry(K key, V value) {
             this.key = key;
             this.value = value;
         }
 
-        public K getKey() {
+        K getKey() {
             return key;
         }
 
-        public V getValue() {
+        V getValue() {
             return value;
         }
 
@@ -76,9 +76,11 @@ public class SimpleHashMap<K, V> {
     public V get(K key) {
         int hash = hash(key);
         List<Entry<K, V>> bucket = table[hash];
-        for (Entry<K, V> entry : bucket) {
-            if (key.equals(entry.key)) {
-                return entry.value;
+        if (bucket != null) {
+            for (Entry<K, V> entry : bucket) {
+                if ((key == entry.key) || (key != null && key.equals(entry.key))) {
+                    return entry.value;
+                }
             }
         }
         return null;
@@ -95,6 +97,9 @@ public class SimpleHashMap<K, V> {
     }
 
     private int hash(K key) {
+        if (key == null) {
+            return 0;
+        }
         return key.hashCode() % table.length;
     }
 

@@ -1,9 +1,11 @@
 package pl.samouczekprogramisty.asd.map;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class TestSimpleHashMap {
@@ -12,7 +14,7 @@ public class TestSimpleHashMap {
         private final int equals;
         private final int hashCode;
 
-        public Dummy(int hashCode, int equals) {
+        Dummy(int hashCode, int equals) {
             this.equals = equals;
             this.hashCode = hashCode;
         }
@@ -92,6 +94,37 @@ public class TestSimpleHashMap {
         map.put(key, "value");
 
         assertThat(map.get(key), is("value"));
+    }
+
+    @Test
+    public void shouldReturnNullForMissingValue() {
+        Dummy key = d(10);
+        assertThat(map.get(key), is(nullValue()));
+    }
+
+    @Test
+    public void shouldHandleNullKey() {
+        Dummy key = null;
+        map.put(key, "value");
+
+        assertThat(map.get(key), is("value"));
+    }
+
+    @Test
+    public void shouldHandleNullValue() {
+        Dummy key = d(10);
+        map.put(key, null);
+
+        assertThat(map.get(key), is(nullValue()));
+    }
+
+    @Test
+    public void shouldOverrideExistingValue() {
+        Dummy key = d(10);
+        map.put(key, "value1");
+        map.put(key, "value2");
+
+        assertThat(map.get(key), is("value2"));
     }
 
 }
