@@ -196,4 +196,46 @@ public class TestSimpleHashMap {
         assertThat(map.table[0], is(nullValue()));
     }
 
+    @Test
+    public void shouldBeAbleToClearMap() {
+        map.put(d(1), "value");
+        map.clear();
+
+        assertThat(map.size(), is(0));
+    }
+
+    @Test
+    public void shouldReturnNullWhenRemovingNonExistingKey() {
+        String removedValue = map.remove(d(10));
+        assertThat(removedValue, is(nullValue()));
+    }
+
+    @Test
+    public void shouldReturnRemovedValue() {
+        Dummy key = d(10);
+        map.put(key, "value");
+        String removedValue = map.remove(key);
+
+        assertThat(removedValue, is("value"));
+    }
+
+    @Test
+    public void shouldntDecreaseSizeWhenValueWasntRemoved() {
+        map.put(d(10), "value");
+        map.put(d(10, 20), "value");
+        map.put(d(15), "value");
+        map.remove(d(20));
+
+        assertThat(map.size(), is(3));
+    }
+
+    @Test
+    public void shouldDecreaseSizeWhenRemovingExistingKey() {
+        map.put(d(10), "value");
+        map.put(d(10, 20), "value");
+        map.put(d(15), "value");
+        map.remove(d(15));
+
+        assertThat(map.size(), is(2));
+    }
 }

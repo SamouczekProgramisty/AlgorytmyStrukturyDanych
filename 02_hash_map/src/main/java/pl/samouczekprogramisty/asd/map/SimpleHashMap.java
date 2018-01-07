@@ -1,5 +1,6 @@
 package pl.samouczekprogramisty.asd.map;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,12 +47,16 @@ public class SimpleHashMap<K, V> {
         return size;
     }
 
+    private boolean keysEqual(K key1, K key2) {
+        return key1 == key2 || (key1 != null && key1.equals(key2));
+    }
+
     public V get(K key) {
         int hash = hash(key);
         List<Entry<K, V>> bucket = table[hash];
         if (bucket != null) {
             for (Entry<K, V> entry : bucket) {
-                if (key == entry.key || (key != null && key.equals(entry.key))) {
+                if (keysEqual(key, entry.key)) {
                     return entry.value;
                 }
             }
@@ -69,7 +74,7 @@ public class SimpleHashMap<K, V> {
         List<Entry<K, V>> bucket = table[hash];
 
         for (Entry<K, V> entry : bucket) {
-            if (key == entry.key || (key != null && key.equals(entry.key))) {
+            if (keysEqual(key, entry.key)) {
                 oldValue = entry.value;
                 entry.value = value;
                 keyExist = true;
@@ -120,8 +125,36 @@ public class SimpleHashMap<K, V> {
         return key.hashCode() % table.length;
     }
 
-    // V remove(Object key);
+    public void clear() {
+        size = 0;
+        for (int bucketIndex = 0; bucketIndex < table.length; bucketIndex++) {
+            table[bucketIndex] = null;
+        }
+    }
 
-    // void clear();
+    public V remove(K key) {
+        List<Entry<K, V>> bucket = table[hash(key)];
+        if (bucket == null) {
+            return null;
+        }
+
+        Iterator<Entry<K, V>> bucketIterator = bucket.iterator();
+        V oldValue = null;
+        while (bucketIterator.hasNext()) {
+            Entry<K, V> entry = bucketIterator.next();
+            if (keysEqual(key, entry.key)) {
+                oldValue = entry.value;
+                bucketIterator.remove();
+                size--;
+                break;
+            }
+        }
+
+        if (bucket.isEmpty()) {
+            table[hash(key)] = null;
+        }
+
+        return oldValue;
+    }
 
 }
