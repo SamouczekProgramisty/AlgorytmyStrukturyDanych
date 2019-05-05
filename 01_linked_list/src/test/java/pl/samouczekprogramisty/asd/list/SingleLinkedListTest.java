@@ -1,67 +1,76 @@
 package pl.samouczekprogramisty.asd.list;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SingleLinkedListTest {
+class SingleLinkedListTest {
 
     private SingleLinkedList<String> list;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         list = new SingleLinkedList<>();
     }
 
     @Test
-    public void shouldSayThatEmptyListIsEmpty() {
+    void shouldSayThatEmptyListIsEmpty() {
         assertThat(list.isEmpty(), is(true));
     }
 
     @Test
-    public void shouldSayThatListWithOneElementIsntEmpty() {
+    void shouldSayThatListWithOneElementIsntEmpty() {
         list.add("12");
         assertThat(list.isEmpty(), is(false));
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void shouldThrowExceptionWhenFetchingFromNegativeIndex() {
-        list.get(-1);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void shouldThrowExceptionWhenFetchingFromEmptyList() {
-        list.get(0);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void shouldTronwExceptionWhenRemovingFromEmptyList() {
-        list.remove(0);
+    @Test
+    void shouldThrowExceptionWhenFetchingFromNegativeIndex() {
+        assertThrows(
+            IndexOutOfBoundsException.class,
+            () -> list.get(-1)
+        );
     }
 
     @Test
-    public void shouldSayThatEmptyListHasSize0() {
+    void shouldThrowExceptionWhenFetchingFromEmptyList() {
+        assertThrows(
+            IndexOutOfBoundsException.class,
+            () -> list.get(0)
+        );
+    }
+
+    @Test
+    void shouldTronwExceptionWhenRemovingFromEmptyList() {
+        assertThrows(
+            IndexOutOfBoundsException.class,
+            () -> list.remove(0)
+        );
+    }
+
+    @Test
+    void shouldSayThatEmptyListHasSize0() {
         assertThat(list.size(), is(0));
     }
 
     @Test
-    public void shouldGetValidSizeForListWithOneElement() {
+    void shouldGetValidSizeForListWithOneElement() {
         list.add("something)");
         assertThat(list.size(), is(1));
     }
 
     @Test
-    public void shouldFetchElementFromList() {
+    void shouldFetchElementFromList() {
         list.add("something");
         assertThat(list.get(0), is("something"));
     }
 
     @Test
-    public void shouldGetSizeForListWithMoreElements() {
+    void shouldGetSizeForListWithMoreElements() {
         list.add("something");
         list.add("else");
         list.add("is");
@@ -70,7 +79,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldGetValidElementFromListWithMoreElements() {
+    void shouldGetValidElementFromListWithMoreElements() {
         list.add("something");
         list.add("else");
         list.add("is");
@@ -82,7 +91,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldBeAbleToClearList() {
+    void shouldBeAbleToClearList() {
         list.add("abc");
         list.clear();
 
@@ -90,7 +99,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldReturnOldValueWhileSettingNew() {
+    void shouldReturnOldValueWhileSettingNew() {
         list.add("abc");
         String oldValue = list.set(0, "cab");
 
@@ -98,7 +107,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldReplaceOldValueWithNew() {
+    void shouldReplaceOldValueWithNew() {
         list.add("abc");
         list.set(0, "cab");
 
@@ -106,7 +115,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldRemoveFirstElement() {
+    void shouldRemoveFirstElement() {
         list.add("abc");
         list.add("bc");
         list.add("c");
@@ -119,7 +128,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldRemoveMiddleElement() {
+    void shouldRemoveMiddleElement() {
         list.add("abc");
         list.add("bc");
         list.add("c");
@@ -132,7 +141,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldRemoveLastElement() {
+    void shouldRemoveLastElement() {
         list.add("abc");
         list.add("bc");
         list.add("c");
@@ -145,7 +154,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldBeAbleToAddAtIndex() {
+    void shouldBeAbleToAddAtIndex() {
         list.add(0, "a");
 
         assertThat(list.size(), is(1));
@@ -153,7 +162,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldKeepAddingAtIndex0() {
+    void shouldKeepAddingAtIndex0() {
         list.add(0, "a");
         list.add(0, "b");
         list.add(0, "c");
@@ -164,25 +173,26 @@ public class SingleLinkedListTest {
         assertThat(list.get(2), is("a"));
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void shouldThrowAnExceptionWhenAddingOnNonExistingIndex() {
-        list.add(1, "a");
+    @Test
+    void shouldThrowAnExceptionWhenAddingOnNonExistingIndex() {
+        assertThrows(
+            IndexOutOfBoundsException.class,
+            () -> list.add(1, "a")
+        );
     }
 
     @Test
-    public void shouldThrowAnExceptionWhenAddingOnNonExistingIndexWithAlreadyFilledList() {
+    void shouldThrowAnExceptionWhenAddingOnNonExistingIndexWithAlreadyFilledList() {
         list.add(0, "a");
 
-        try {
-            list.add(2, "nope");
-            fail("IndexOutOfBountsException should have been thrown!");
-        } catch (IndexOutOfBoundsException e) {
-            // that's expected
-        }
+        assertThrows(
+            IndexOutOfBoundsException.class,
+            () -> list.add(2, "nope")
+        );
     }
 
     @Test
-    public void shouldKeepAddingAtTheEnd() {
+    void shouldKeepAddingAtTheEnd() {
         list.add(0, "a");
         list.add(1, "b");
         list.add(2, "c");
@@ -194,7 +204,7 @@ public class SingleLinkedListTest {
     }
 
     @Test
-    public void shouldRemoveLastElementFromList() {
+    void shouldRemoveLastElementFromList() {
         list.add("a");
         list.remove(0);
 

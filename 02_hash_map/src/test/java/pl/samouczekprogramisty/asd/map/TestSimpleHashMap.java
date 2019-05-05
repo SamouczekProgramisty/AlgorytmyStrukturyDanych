@@ -1,14 +1,12 @@
 package pl.samouczekprogramisty.asd.map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
-public class TestSimpleHashMap {
+class TestSimpleHashMap {
 
     private static class Dummy {
         private final int equals;
@@ -40,56 +38,56 @@ public class TestSimpleHashMap {
         return new Dummy(hash, equals);
     }
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         map = new SimpleHashMap<>();
     }
 
     @Test
-    public void shouldBeAbleToGetEmptyMapSize() {
+    void shouldBeAbleToGetEmptyMapSize() {
         assertThat(map.size(), is(0));
     }
 
     @Test
-    public void shouldBeAbleToTellThatEmptyMapIsEmpty() {
+    void shouldBeAbleToTellThatEmptyMapIsEmpty() {
         assertThat(map.isEmpty(), is(true));
     }
 
     @Test
-    public void shouldBeAbleToAddNewItemToMap() {
+    void shouldBeAbleToAddNewItemToMap() {
         map.put(d(10), "value");
         assertThat(map.isEmpty(), is(false));
     }
 
     @Test
-    public void shouldReturnNullIfKeyIsMissing() {
+    void shouldReturnNullIfKeyIsMissing() {
         String value = map.put(d(10), "value");
         assertThat(value, is(nullValue()));
     }
 
     @Test
-    public void shouldIncrementSizeWhenAddingElement() {
+    void shouldIncrementSizeWhenAddingElement() {
         map.put(d(10), "value");
         assertThat(map.size(), is(1));
     }
 
     @Test
-    public void shouldCreateTableWithDefaultSize() {
+    void shouldCreateTableWithDefaultSize() {
         assertThat(map.table.length, is(4));
     }
 
     @Test
-    public void shouldCreateTableWithDefaultThreshold() {
+    void shouldCreateTableWithDefaultThreshold() {
         assertThat(map.threshold, is(3));
     }
 
     @Test
-    public void shouldBeAbleToSayThatKey() {
+    void shouldBeAbleToSayThatKey() {
         assertThat(map.threshold, is(3));
     }
 
     @Test
-    public void shouldReturnAlreadyInsertedValue() {
+    void shouldReturnAlreadyInsertedValue() {
         Dummy key = d(10);
         map.put(key, "value");
 
@@ -97,13 +95,13 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldReturnNullForMissingValue() {
+    void shouldReturnNullForMissingValue() {
         Dummy key = d(10);
         assertThat(map.get(key), is(nullValue()));
     }
 
     @Test
-    public void shouldHandleNullKey() {
+    void shouldHandleNullKey() {
         Dummy key = null;
         map.put(key, "value");
 
@@ -111,7 +109,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldHandleNullValue() {
+    void shouldHandleNullValue() {
         Dummy key = d(10);
         map.put(key, null);
 
@@ -119,7 +117,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldOverrideExistingValue() {
+    void shouldOverrideExistingValue() {
         Dummy key = d(10);
         map.put(key, "oldValue");
         map.put(key, "newValue");
@@ -128,7 +126,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldReturnPreviousValueWhenAddingOneForExistingKey() {
+    void shouldReturnPreviousValueWhenAddingOneForExistingKey() {
         Dummy key = d(10);
         map.put(key, "oldValue");
         String oldValue = map.put(key, "newValue");
@@ -137,7 +135,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldntIncrementSizeWhenReplacingOldValue() {
+    void shouldntIncrementSizeWhenReplacingOldValue() {
         Dummy key = d(10);
         map.put(key, "oldValue");
         map.put(key, "newValue");
@@ -146,7 +144,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldBeAbleToAddNewValueToExistingBucket() {
+    void shouldBeAbleToAddNewValueToExistingBucket() {
         map.put(d(10, 100), "value1");
         map.put(d(10, 200), "value2");
 
@@ -155,7 +153,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldPutValueToValidBucket() {
+    void shouldPutValueToValidBucket() {
         Dummy key = d(10);
         map.put(key, "value");
 
@@ -163,7 +161,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldIncrementSizeWhenAddingNewKey() {
+    void shouldIncrementSizeWhenAddingNewKey() {
         map.put(d(10), "value1");
         map.put(d(11), "value2");
 
@@ -171,7 +169,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldResizeWhenHitThreshold() {
+    void shouldResizeWhenHitThreshold() {
         map.put(d(10), "value1");
         map.put(d(11), "value2");
         assertThat(map.table.length, is(4));
@@ -183,7 +181,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldAssignToDifferentBucketsAfterResize() {
+    void shouldAssignToDifferentBucketsAfterResize() {
         map.put(d(4), "value1");
         map.put(d(3), "value2");
         assertThat(map.table[0].size(), is(1)); // 4 % 4
@@ -197,7 +195,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldBeAbleToClearMap() {
+    void shouldBeAbleToClearMap() {
         map.put(d(1), "value");
         map.clear();
 
@@ -205,13 +203,13 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldReturnNullWhenRemovingNonExistingKey() {
+    void shouldReturnNullWhenRemovingNonExistingKey() {
         String removedValue = map.remove(d(10));
         assertThat(removedValue, is(nullValue()));
     }
 
     @Test
-    public void shouldReturnRemovedValue() {
+    void shouldReturnRemovedValue() {
         Dummy key = d(10);
         map.put(key, "value");
         String removedValue = map.remove(key);
@@ -220,7 +218,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldntDecreaseSizeWhenValueWasntRemoved() {
+    void shouldntDecreaseSizeWhenValueWasntRemoved() {
         map.put(d(10), "value");
         map.put(d(10, 20), "value");
         map.put(d(15), "value");
@@ -230,7 +228,7 @@ public class TestSimpleHashMap {
     }
 
     @Test
-    public void shouldDecreaseSizeWhenRemovingExistingKey() {
+    void shouldDecreaseSizeWhenRemovingExistingKey() {
         map.put(d(10), "value");
         map.put(d(10, 20), "value");
         map.put(d(15), "value");
