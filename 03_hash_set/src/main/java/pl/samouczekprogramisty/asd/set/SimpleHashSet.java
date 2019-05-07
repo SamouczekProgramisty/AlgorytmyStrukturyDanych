@@ -1,12 +1,13 @@
 package pl.samouczekprogramisty.asd.set;
 
 import pl.samouczekprogramisty.asd.map.SimpleHashMap;
+import pl.samouczekprogramisty.asd.map.SimpleMap;
 
 
 public class SimpleHashSet<T> implements SimpleSet<T> {
     private static final Object PRESENT = new Object();
 
-    private final SimpleHashMap<T, Object> map = new SimpleHashMap<>();
+    private final SimpleMap<T, Object> map = new SimpleHashMap<>();
 
     @Override
     public int size() {
