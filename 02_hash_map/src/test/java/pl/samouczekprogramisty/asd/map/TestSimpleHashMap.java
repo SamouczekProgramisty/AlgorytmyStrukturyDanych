@@ -236,4 +236,21 @@ class TestSimpleHashMap {
 
         assertThat(map.size(), is(2));
     }
+
+    @Test
+    void shouldntContainAnyKey() {
+        assertThat(map.containsKey(d(10)), is(false));
+    }
+
+    @Test
+    void shouldContainKey() {
+        map.put(d(10), "value");
+        assertThat(map.containsKey(d(10)), is(true));
+    }
+
+    @Test
+    void shouldContainKeyWithNullValue() {
+        map.put(d(10), null);
+        assertThat(map.containsKey(d(10)), is(true));
+    }
 }

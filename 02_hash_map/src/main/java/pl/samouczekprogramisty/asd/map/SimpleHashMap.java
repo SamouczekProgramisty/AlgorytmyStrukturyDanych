@@ -55,12 +55,20 @@ public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
 
     @Override
     public V get(K key) {
+        Entry<K, V> entry = getEntry(key);
+        if (entry == null) {
+            return null;
+        }
+        return entry.value;
+    }
+
+    private Entry<K, V> getEntry(K key) {
         int hash = hash(key);
         List<Entry<K, V>> bucket = table[hash];
         if (bucket != null) {
             for (Entry<K, V> entry : bucket) {
                 if (keysEqual(key, entry.key)) {
-                    return entry.value;
+                    return entry;
                 }
             }
         }
@@ -161,6 +169,11 @@ public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
         }
 
         return oldValue;
+    }
+
+    @Override
+    public boolean containsKey(K key) {
+        return getEntry(key) != null;
     }
 
 }

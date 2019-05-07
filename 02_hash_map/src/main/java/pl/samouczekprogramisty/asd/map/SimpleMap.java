@@ -7,4 +7,5 @@ public interface SimpleMap<K, V> {
     V put(K key, V value);
     void clear();
     V remove(K key);
+    boolean containsKey(K key);
 }
