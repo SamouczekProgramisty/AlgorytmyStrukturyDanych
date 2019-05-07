@@ -3,6 +3,7 @@ package pl.samouczekprogramisty.asd.map;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
 
@@ -50,7 +51,7 @@ public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
     }
 
     private boolean keysEqual(K key1, K key2) {
-        return key1 == key2 || (key1 != null && key1.equals(key2));
+        return Objects.equals(key1, key2);
     }
 
     @Override
