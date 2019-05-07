@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimpleHashMap<K, V> {
+public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
 
     private static final float LOAD_FACTOR = 0.75F;
 
@@ -39,10 +39,12 @@ public class SimpleHashMap<K, V> {
         threshold = (int) (initialCapacity * LOAD_FACTOR);
     }
 
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+    @Override
     public int size() {
         return size;
     }
@@ -51,6 +53,7 @@ public class SimpleHashMap<K, V> {
         return key1 == key2 || (key1 != null && key1.equals(key2));
     }
 
+    @Override
     public V get(K key) {
         int hash = hash(key);
         List<Entry<K, V>> bucket = table[hash];
@@ -64,6 +67,7 @@ public class SimpleHashMap<K, V> {
         return null;
     }
 
+    @Override
     public V put(K key, V value) {
         int hash = hash(key);
         if (table[hash] == null) {
@@ -125,6 +129,7 @@ public class SimpleHashMap<K, V> {
         return key.hashCode() % table.length;
     }
 
+    @Override
     public void clear() {
         size = 0;
         for (int bucketIndex = 0; bucketIndex < table.length; bucketIndex++) {
@@ -132,6 +137,7 @@ public class SimpleHashMap<K, V> {
         }
     }
 
+    @Override
     public V remove(K key) {
         List<Entry<K, V>> bucket = table[hash(key)];
         if (bucket == null) {
