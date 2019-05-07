@@ -135,7 +135,7 @@ public class SimpleHashMap<K, V> implements SimpleMap<K, V> {
         if (key == null) {
             return 0;
         }
-        return key.hashCode() % table.length;
+        return Math.abs(key.hashCode() % table.length);
     }
 
     @Override
